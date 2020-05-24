@@ -67,6 +67,7 @@ void initOTA(){
 // -----------------------  Web Server Section ----------------------------------------------------------------------
 
 void initWebServer() {
+
   server.on("/", HTTP_GET, handleRoot);
   server.on("/myscripts.js", HTTP_GET, handleJavascript);
 
@@ -77,8 +78,9 @@ void initWebServer() {
 void handleRoot() {
   server.send(200, "text/html", "<html lang='en'><head> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <meta http-equiv='X-UA-Compatible' content='ie=edge'> <meta name='mobile-web-app-capable' content='yes'> <title>ESP</title> <script src='myscripts.js'></script></head><style>#buttons{max-width: 500px; padding-inline-start: 0; margin: 10px;}#buttons li{list-style: none; text-align: center; background-color: #60759b; margin-bottom: 20px; padding: 20px; font-size: 2em; box-shadow: 1vw 1vw 3vw 1px #ccc;}.header{font-size: 2em; margin: 1em;}#buttons li a{text-decoration: none; color: #FFFFFF; display: block;}#buttons li a:hover{text-decoration: none; color: #FFF; font-weight: bold; background-color: hsl(250, 24%, 49%);}</style><body> <div style='font-family:sans-serif'> <div class='header'>Title</div><ul id='buttons'> </ul> </div><script>var lis=''; if(buttonData){for (var i=0; i < buttonData.length; i++){var parts=buttonData[i].split('|'); lis +='<li><a href=\"' + parts[1] + '\">' + parts[0] + '</a></li>';}document.getElementById('buttons').innerHTML=lis;}</script></body></html>");
 }
+
 void handleJavascript() {
-  server.send(200, "application/javascript", "var buttonData = ['Test|./test.html']");   // Send HTTP status 200 (Ok) and send some text to the browser/client
+  server.send(200, "application/javascript", "var buttonData = ['Test LED 1|./led1']");   // Send HTTP status 200 (Ok) and send some text to the browser/client
 }
 
 void handleNotFound(){
