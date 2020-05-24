@@ -30,3 +30,10 @@ The `void handleJavascript()` function has an example with a single button "Test
 The html code for the demo page is available in `index.html` in this repository.
 This has been minimized and before it was added to the `void handleRoot()` function as a string.
 
+### Demo page
+The buttons are generated from a simple array of strings where the strings contain the text and link seperated with a pipe symbol as shown here:
+```
+var buttonData = ['Test LED 1|./led1']
+``` 
+
+![Demo Page with a singe button](https://i.imgur.com/Unsgcz8.png)
