@@ -1,6 +1,7 @@
 #include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 #include <ArduinoOTA.h>
+#include <DNSServer.h>
 #include <WiFiManager.h>
 
 // Set web server port number to 80
@@ -92,8 +93,8 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Booting");
 
-  initOTA();
   initWifi();
+  initOTA();
   initWebServer();
 
   Serial.print("IP address: ");
