@@ -3,6 +3,7 @@
 #include <ArduinoOTA.h>
 #include <DNSServer.h>
 #include <WiFiManager.h>
+#include "LittleFS.h"
 
 // Set web server port number to 80
 ESP8266WebServer server(80);
@@ -65,19 +66,48 @@ void initOTA(){
 
 }
 
+void initFS() {
+  delay(500);
+
+  // Uncomment and run it once, if you want to erase all the stored data in the filesystem
+  // LittleFS.format();
+
+ 
+  Serial.println(F("Inizializing FS..."));
+  if (LittleFS.begin()){
+    Serial.println(F("done."));
+  }else{
+    Serial.println(F("fail."));
+  }
+  
+  // Open dir folder
+  Dir dir = LittleFS.openDir("/");
+  // Cycle all the content
+  while (dir.next()) {
+    // get filename
+    Serial.print(dir.fileName());
+    Serial.print(" - ");
+    // If element have a size display It else write 0
+    if(dir.fileSize()) {
+      File f = dir.openFile("r");
+      Serial.println(f.size());
+      f.close();
+    }else{
+      Serial.println("0");
+    }
+  }
+}
+
 // -----------------------  Web Server Section ----------------------------------------------------------------------
 
 void initWebServer() {
 
-  server.on("/", HTTP_GET, handleRoot);
+  server.serveStatic("/", LittleFS, "/index.html");
+  server.serveStatic("/index.html", LittleFS, "/index.html");
   server.on("/myscripts.js", HTTP_GET, handleJavascript);
 
   server.onNotFound(handleNotFound);
   server.begin();  
-}
-
-void handleRoot() {
-  server.send(200, "text/html", "<html lang='en'><head> <meta charset='UTF-8'> <meta name='viewport' content='width=device-width, initial-scale=1.0'> <meta http-equiv='X-UA-Compatible' content='ie=edge'> <meta name='mobile-web-app-capable' content='yes'> <title>ESP</title> <script src='myscripts.js'></script></head><style>#buttons{max-width: 500px; padding-inline-start: 0; margin: 10px;}#buttons li{list-style: none; text-align: center; background-color: #60759b; margin-bottom: 20px; padding: 20px; font-size: 2em; box-shadow: 1vw 1vw 3vw 1px #ccc;}.header{font-size: 2em; margin: 1em;}#buttons li a{text-decoration: none; color: #FFFFFF; display: block;}#buttons li a:hover{text-decoration: none; color: #FFF; font-weight: bold;}</style><body> <div style='font-family:sans-serif'> <div class='header'>Title</div><ul id='buttons'> </ul> </div><script>var lis=''; if(buttonData){for (var i=0; i < buttonData.length; i++){var parts=buttonData[i].split('|'); lis +='<li><a href=\"' + parts[1] + '\">' + parts[0] + '</a></li>';}document.getElementById('buttons').innerHTML=lis;}</script></body></html>");
 }
 
 void handleJavascript() {
@@ -93,6 +123,7 @@ void setup() {
   Serial.begin(115200);
   Serial.println("Booting");
 
+  initFS();
   initWifi();
   initOTA();
   initWebServer();
@@ -104,6 +135,5 @@ void setup() {
 
 void loop() {
   ArduinoOTA.handle();
-
   server.handleClient();
 }
