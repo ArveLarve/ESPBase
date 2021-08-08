@@ -4,8 +4,11 @@
 A minimalistic Arduino project with WifiManager, OTA and a web server for ESP8266 and ESP32. A nice starting point for any new ESP projects.
 
 ## Dependencies
+### Libraires
 - [ESP8266 Core for Android](https://github.com/esp8266/Arduino) (Arduino core for ESP8266 WiFi chip)
 - [WifiManager](https://github.com/tzapu/WiFiManager) (ESP8266 WiFi Connection manager with fallback web configuration portal)
+### Tools
+- [LittleFS Filesystem Uploader](https://github.com/earlephilhower/arduino-esp8266littlefs-plugin) (Tool to upload data folder to LittleFS)
 
 Make sure you have installed the dependencies according to their installation instructions for your environment
 
@@ -29,8 +32,8 @@ The project comes with a simple web page that displays a list of buttons.
 
 The buttons are generated from a javascript array of strings.
 The `void handleJavascript()` function has an example with a single button "Test" and a link to a non-existent enpoint called `http://{your_ESP_IP}/led1`
-The html code for the demo page is available in `index.html` in this repository.
-This has been minimized and before it was added to the `void handleRoot()` function as a string.
+The html code for the demo page is available in `datd/index.html` in this repository.
+Make sure to upload the contents of the data folder using the LittleFS file upload utility
 
 ### Demo page
 The buttons are generated from a simple array of strings where the strings contain the text and link seperated with a pipe symbol as shown here:
