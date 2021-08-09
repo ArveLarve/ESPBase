@@ -18,13 +18,11 @@ Make sure you have installed the dependencies according to their installation in
 ### Connecting to wifi
 As described in the WifiManager projects documentation:
 
-- When your ESP starts up, it sets it up in Station mode and tries to connect to a previously saved Access Point
-- if this is unsuccessful (or no previous network saved) it moves the ESP into Access Point mode and spins up a DNS and WebServer (default ip 192.168.4.1)
-- using any wifi enabled device with a browser (computer, phone, tablet) connect to the newly created Access Point
-- because of the Captive Portal and the DNS server you will either get a 'Join to network' type of popup or get any domain you try to access redirected to the configuration portal
-- choose one of the access points scanned, enter password, click save
-- ESP will try to connect. If successful, it relinquishes control back to your app. If not, reconnect to AP and reconfigure.
-- There are options to change this behavior or manually start the configportal and webportal independantly as well as run them in non blocking mode.
+- When your ESP starts up, it enters Station mode and tries to connect to a previously saved Access Point
+- If this is unsuccessful (or no previous network saved) it puts itself into Access Point mode and starts a configuration webpage (default ip 192.168.4.1)
+- Using any wifi enabled device with a browser (computer, phone, tablet) connect to the newly created Access Point
+- On the captive portal webpage, choose one of the access points scanned, enter a password and click save
+- The ESP will try to connect. If successful, it continues running your program
 
 
 ### Configure the Web server
@@ -32,13 +30,13 @@ The project comes with a simple web page that displays a list of buttons.
 
 The buttons are generated from a javascript array of strings.
 The `void handleJavascript()` function has an example with a single button "Test" and a link to a non-existent enpoint called `http://{your_ESP_IP}/led1`
-The html code for the demo page is available in `datd/index.html` in this repository.
+The html code for the demo page is available in `data/index.html` in this repository.
 Make sure to upload the contents of the data folder using the LittleFS file upload utility
 
 ### Demo page
-The buttons are generated from a simple array of strings where the strings contain the text and link seperated with a pipe symbol as shown here:
+The buttons are generated from an array of strings where the strings contain the button text and link seperated with a pipe symbol as shown here:
 ```
-var buttonData = ['Test|./led1']
+var buttonData = ['Toggle LED|/led1']
 ``` 
 
-![Demo Page with a singe button](https://i.imgur.com/Unsgcz8.png)
+![Demo Page with a singe button](./documentation/Screenshot.jpg)
