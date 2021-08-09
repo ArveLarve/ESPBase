@@ -8,53 +8,75 @@
     <script src='myscripts.js'></script>
 </head>
 <style>
+    .disabled {
+        color: #8f9cb4 !important;
+    }
+
     #buttons {
         max-width: 500px;
         padding-inline-start: 0;
         margin: 10px;
     }
+
     #buttons li {
         list-style: none;
         text-align: center;
+        border-radius: 2em;
         background-color: #60759b;
         margin-bottom: 20px;
-        padding: 20px;
         font-size: 2em;
         box-shadow: 1vw 1vw 3vw 1px #ccc;
     }
 
-    .header{
+    .header {
         font-size: 2em;
         margin: 1em;
     }
 
-    #buttons li a {
-        text-decoration: none;
-        color: #FFFFFF;
+    #buttons li button {
+        background-color: #0000;
+        font-size: 1em;
+        color: #fff;
+        border-style: hidden;
+        padding: 20px;
         display: block;
-    }
-
-    #buttons li a:hover {
-        text-decoration: none;
-        color: #FFF;
-        font-weight: bold;
+        width: 100%;
+        padding: 0.7em;
+        cursor: pointer;
     }
 </style>
 <body>
     <div style='font-family:sans-serif'>
-        <div class='header'>Title</div>
+        <div class='header'>Web demo</div>
         <ul id='buttons'>
         </ul>
     </div>
 <script>
     var lis = '';
-    if(buttonData) {
-        for (var i = 0; i < buttonData.length; i++){
-            var parts = buttonData[i].split('|');
-            lis += '<li><a href=\"' + parts[1] + '\">' + parts[0] + '</a></li>';
+        if (buttonData) { 
+            for (var i = 0; i < buttonData.length; i++) { 
+                var parts = buttonData[i].split('|');
+                lis += '<li><button onclick="clickAction(\'' + parts[1] + '\',this)">' + parts[0] + '</button></li>';
+            } 
+            document.getElementById('buttons').innerHTML = lis;
         }
-        document.getElementById('buttons').innerHTML = lis;
-    }
+
+        function clickAction(endpoint, object) {
+            object.disabled = true;
+            object.classList.add("disabled");
+            fetch(endpoint)
+            .then(response => {
+                if (response.status == 200) {
+                    response.json().then((data) => {
+                        console.log(data);
+                    })
+                } else {
+                    console.log('Looks like there was a problem. Status Code: ' + data.status);
+                }
+                object.disabled = false;
+                object.classList.remove("disabled");
+            });
+        }
 </script>
 </body>
 </html>

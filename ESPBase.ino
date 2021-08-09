@@ -80,14 +80,14 @@ void initFS() {
     Serial.println(F("fail."));
   }
   
-  // Open dir folder
+  // Open root folder
   Dir dir = LittleFS.openDir("/");
-  // Cycle all the content
+  // List all files
   while (dir.next()) {
-    // get filename
+    // Print the filename
     Serial.print(dir.fileName());
     Serial.print(" - ");
-    // If element have a size display It else write 0
+    // Print the size of the file
     if(dir.fileSize()) {
       File f = dir.openFile("r");
       Serial.println(f.size());
@@ -106,20 +106,39 @@ void initWebServer() {
   server.serveStatic("/index.html", LittleFS, "/index.html");
   server.on("/myscripts.js", HTTP_GET, handleJavascript);
 
+  server.on("/led1", HTTP_GET, toggleLed);
+
   server.onNotFound(handleNotFound);
   server.begin();  
 }
 
+
+void toggleLed() {
+
+  int newLedStatus = digitalRead(LED_BUILTIN);
+  char returnVal[100];
+  sprintf(returnVal, "{\"ledStatus\":%d}", newLedStatus);
+
+  digitalWrite(LED_BUILTIN, !newLedStatus);
+  server.send(200,"application/json", returnVal);
+}
+
 void handleJavascript() {
-  server.send(200, "application/javascript", "var buttonData = ['Test LED 1|./led1']");   // Send HTTP status 200 (Ok) and send some text to the browser/client
+  // Send HTTP status 200 (Ok) and send some text to the browser/client
+  server.send(200, "application/javascript", "var buttonData = ['Toggle LED|/led1'];");   
 }
 
 void handleNotFound(){
-  server.send(404, "text/plain", "404: Not found"); // Send HTTP status 404 (Not Found) when there's no handler for the URI in the request
-}
+  // Send HTTP status 404 (Not Found) when there's no handler for the URI in the request
+  server.send(404, "text/plain", "404: Not found"); }
 // ---------------------------------------------------------------------------------------------------------------
 
 void setup() {
+  
+  pinMode(LED_BUILTIN, OUTPUT);
+  // Turn on LED (the LED has a pull-up resistor, so the logic is inverted)
+  digitalWrite(LED_BUILTIN, !HIGH);
+
   Serial.begin(115200);
   Serial.println("Booting");
 
@@ -130,6 +149,9 @@ void setup() {
 
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+
+  // Turn off LED when connected to Wifi and ready.
+  digitalWrite(LED_BUILTIN, !LOW);
 
 }
 
