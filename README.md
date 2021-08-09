@@ -3,6 +3,11 @@
 
 A minimalistic Arduino project with WifiManager, OTA and a web server for ESP8266 and ESP32. A nice starting point for any new ESP projects.
 
+## PlatformIO and Arduino IDE
+
+The main branch contains code for usage with [PlatformIO](https://platformio.org/).
+If you prefer using the old Arduino IDE, the [ArduinoIDE](https://github.com/ArveLarve/ESPBase/tree/ArduinoIDE) branch contains the code for this.
+
 ## Dependencies
 ### Libraires
 - [ESP8266 Core for Android](https://github.com/esp8266/Arduino) (Arduino core for ESP8266 WiFi chip)
